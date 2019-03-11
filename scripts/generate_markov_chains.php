@@ -15,9 +15,7 @@ $log->info('test');
 
 try {
     $chainExtractor = new \TextGen\Markov\ChainExtractor();
-    $db = new PDO('mysql:host=localhost;dbname=generator;port=5115', 'root', 'root');
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->exec('SET NAMES utf8');
+    $db = new \TextGen\Db();
     $db->exec('TRUNCATE TABLE markov_chains');
     $insertChainsStatement = $db->prepare(
         'INSERT INTO markov_chains(start_link, end_link) VALUES (?, ?) ON DUPLICATE KEY UPDATE weight = weight + 1'
