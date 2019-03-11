@@ -17,9 +17,6 @@ try {
     $chainExtractor = new \TextGen\Markov\ChainExtractor();
     $db = new \TextGen\Db();
     $db->exec('TRUNCATE TABLE markov_chains');
-    $insertChainsStatement = $db->prepare(
-        'INSERT INTO markov_chains(start_link, end_link) VALUES (?, ?) ON DUPLICATE KEY UPDATE weight = weight + 1'
-    );
 
     $totalCount = 0;
     $handle = fopen(__DIR__ . '/../data/articles', "r");
@@ -37,7 +34,7 @@ try {
             $chains = $chainExtractor->getChains($text);
             foreach ($chains as $chain) {
                 $log->debug("{$chain->startLink} => {$chain->endLink}");
-                $insertChainsStatement->execute([$chain->startLink, $chain->endLink]);
+                $db->batchInsert([$chain->startLink, $chain->endLink]);
             }
             $log->info(sprintf('Обработано %s из %s', $i, $totalCount));
 
@@ -46,6 +43,9 @@ try {
     } else {
         throw new Exception('error opening file');
     }
+
+    $db->finishBatch();
+
 } catch (Exception $e) {
     $log->critical($e->getMessage(), [$e]);
 } finally {
