@@ -28,6 +28,22 @@ class MarkovGenerator implements GeneratorInterface
 
     public function writeArticle(): string
     {
+        $tries = 1;
+        $title = $this->generateTitle();
+
+        $wordCount = $this->countWords($title);
+        while (($wordCount < 5 || $wordCount > 12) && $tries <= 5) {
+            $title = $this->generateTitle();
+            $wordCount = $this->countWords($title);
+
+            $tries++;
+        }
+
+        return $title;
+    }
+
+    private function generateTitle(): string
+    {
         $title = '';
         $word = $this->getLink(Chain::PHRASE_START);
         $separator = '';
@@ -38,6 +54,7 @@ class MarkovGenerator implements GeneratorInterface
         }
 
         return $title;
+
     }
 
     private function getLink(string $startLink): string
@@ -62,6 +79,15 @@ class MarkovGenerator implements GeneratorInterface
             }
         }
         return Chain::PHRASE_END;
+    }
+
+    /**
+     * @param $title
+     * @return int
+     */
+    public function countWords($title): int
+    {
+        return count(preg_split('~[^\p{L}\p{N}\']+~u', $title));
     }
 
 
