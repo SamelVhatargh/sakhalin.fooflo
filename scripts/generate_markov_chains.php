@@ -49,5 +49,7 @@ try {
 } catch (Exception $e) {
     $log->critical($e->getMessage(), [$e]);
 } finally {
-    fclose($handle);
+    if (isset($handle)) {
+        fclose($handle);
+    }
 }

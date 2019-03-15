@@ -10,7 +10,12 @@ class Db extends PDO
 
     public function __construct()
     {
-        parent::__construct('mysql:host=localhost;dbname=generator;port=5115', 'root', 'root');
+        $host = CONFIG['db']['host'];
+        $port = CONFIG['db']['port'];
+        $user = CONFIG['db']['user'];
+        $password = CONFIG['db']['password'];
+        $db = CONFIG['db']['dbname'];
+        parent::__construct("mysql:host=$host;dbname=$db;port=$port", $user, $password);
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->exec('SET NAMES utf8');
     }
