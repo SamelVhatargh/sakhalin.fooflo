@@ -7,14 +7,18 @@ use TextGen\Generators\PatternGenerator;
 
 require_once __DIR__ . '/common.php';
 
+const MARKOV_GENERATOR = 50;
+const NEURAL_NETWORK_GENERATOR = 25;
+const PATTERN_GENERATOR = 25;
+
 $telegram = new \TextGen\Telegram\TelegramSender();
 $rand = rand(1, 100);
 
-if ($rand <= 50) {
+if ($rand <= MARKOV_GENERATOR) {
     $generator = new MarkovGenerator(new Db);
-} elseif ($rand >= 50 && $rand <= 75) {
+} elseif (MARKOV_GENERATOR + NEURAL_NETWORK_GENERATOR >= $rand) {
     $generator = new NeuralNetworkGenerator();
-} elseif ($rand >= 75 && $rand <= 100) {
+} else {
     $generator = new PatternGenerator();
 }
 
