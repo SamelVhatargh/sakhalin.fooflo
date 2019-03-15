@@ -7,4 +7,10 @@ return [
         'password' => 'root',
         'dbname' => 'fooflo',
     ],
+    'tg' => [
+        'token' => '999999999:XXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        'chatId' => '99999999',
+        'proxy' => 'host:port',
+        'proxyuserpwd' => 'login:password',
+    ],
 ];
