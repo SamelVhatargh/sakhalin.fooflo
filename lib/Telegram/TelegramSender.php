@@ -2,9 +2,11 @@
 
 namespace TextGen\Telegram;
 
+use TextGen\Generators\GeneratorInterface;
+
 class TelegramSender
 {
-    public function sendMessage($message)
+    public function sendMessage(GeneratorInterface $generator)
     {
         $ch = curl_init();
         curl_setopt_array(
@@ -16,7 +18,7 @@ class TelegramSender
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_POSTFIELDS => array(
                     'chat_id' => CONFIG['tg']['chatId'],
-                    'text' => $message,
+                    'text' => $generator->getName() ."\n". $generator->writeArticle(),
                 ),
                 CURLOPT_PROXY => CONFIG['tg']['proxy'],
                 CURLOPT_PROXYUSERPWD => CONFIG['tg']['proxyuserpwd'],
